@@ -43,7 +43,7 @@ class Gcc <Formula
     
     # Get the prefixs' for the already installed dependencies.
     gmp = Formula.factory 'gmp'
-    limpc = Formula.factory 'libmpc'
+    libmpc = Formula.factory 'libmpc'
     mpfr = Formula.factory 'mpfr'
     
     # This is not the default for GCC (which is all but Ada and Obj-C++)
