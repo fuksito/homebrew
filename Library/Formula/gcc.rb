@@ -17,7 +17,7 @@ class Gcc <Formula
   
   # FIXME: Include support for Ada at some point, there are other dependencies,
   # and I have never used it, so have not explored it yet (GNAT Compiler).
-  avail_langs = ['c', 'c++', 'fortran', 'java', 'objc', 'objc++']
+  avail_langs = ['c', 'c++', 'fortran', 'java', 'objc', 'obj-c++']
   
   # FIXME: I don't know ruby, and I am sure this is a much more elegant solution for this.
   def options 
@@ -26,7 +26,7 @@ class Gcc <Formula
       ["--enable-fortran", "Enable Fortran language support"],
       ["--enable-java", "Enable Java languagesupport"],
       ["--enable-objc", "Enable Objective-C language support"],
-      ["--enable-objc++", "Enable Objective-C++ language support"],
+      ["--enable-obj-c++", "Enable Objective-C++ language support"],
       ["--disable-c", "Disable C language support"],
       ["--disable-c++", "Disable C++ language support"]
       #avail_langs.map { |e| ["--enable-#{e}", "enable #{e} language support"] },
@@ -61,8 +61,8 @@ class Gcc <Formula
         base_langs << 'java'
       when '--enable-objc'
         base_langs << 'objc'
-      when '--enable-objc++'
-        base_langs << 'objc++'
+      when '--enable-obj-c++'
+        base_langs << 'obj-c++'
       when '--disable-c'
         base_langs.delete 'c'
       when '--disable-c++'
