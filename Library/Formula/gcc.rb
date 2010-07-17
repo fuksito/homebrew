@@ -5,8 +5,8 @@ class Gcc <Formula
   homepage 'http://gcc.gnu.org'
   md5 'ff27b7c4a5d5060c8a8543a44abca31f'
 
-  depends_on 'automake' # >= 1.11.1
   depends_on 'autoconf' # >= 2.64
+  depends_on 'automake' # >= 1.11.1
   depends_on 'gmp'      # >= 4.3.2
   depends_on 'libmpc'   # >= 0.8.1
   depends_on 'mpfr'     # >= 2.4.2
