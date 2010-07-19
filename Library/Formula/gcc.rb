@@ -8,8 +8,8 @@ class Gcc <Formula
   depends_on 'autoconf' # >= 2.64
   depends_on 'automake' # >= 1.11.1
   depends_on 'gmp'      # >= 4.3.2
-  depends_on 'libmpc'   # >= 0.8.1
   depends_on 'mpfr'     # >= 2.4.2
+  depends_on 'libmpc'   # >= 0.8.1
 
   aka 'g++'
 
@@ -32,6 +32,11 @@ class Gcc <Formula
 
     # This is the default for OS X gcc.
     base_langs = ['c', 'objc', 'c++', 'obj-c++']
+
+    # Get the prefixs' for the already installed dependencies.
+    gmp = Formula.factory 'gmp'
+    mpfr = Formula.factory 'mpfr'
+    libmpc = Formula.factory 'libmpc'
 
     # FIXME: Create a better, more ruby, way format for this.
     ARGV.each do |arg|
@@ -60,7 +65,8 @@ class Gcc <Formula
         "--program-transform-name=/^[cg][^.-]*$/s/$/-#{version.slice(/\d\.\d/)}/",
         "--with-slibdir=#{lib}", "--build=i686-apple-darwin10", 
         "--with-gxx-include-dir=#{include}/#{version}",
-        "--host=i686-apple-darwin10", "--target=i686-apple-darwin10"
+        "--host=i686-apple-darwin10", "--target=i686-apple-darwin10",
+        "--with-gmp=#{gmp.prefix}", "--with-mpfr=#{mpfr.prefix}", "--with-mpc=#{libmpc.prefix}"
       ]
 
     system "./configure", *args
