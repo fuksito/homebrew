@@ -1,10 +1,9 @@
 require 'formula'
 
 class Vim <Formula
-  # Get patch-level 446 from Subversion;
-  # downloading and applying separate patches is completely ridiculous.
-  head 'http://vim.svn.sourceforge.net/svnroot/vim/branches/vim7.2/', :revision => '1889'
+  url 'http://vim.svn.sourceforge.net/svnroot/vim/branches/vim7.2/', :revision => '1889'
   version '7.2.446'
+  head 'http://vim.svn.sourceforge.net/svnroot/vim/trunk/'
   homepage 'http://www.vim.org/'
 
   def install
