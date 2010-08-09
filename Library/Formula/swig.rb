@@ -10,11 +10,11 @@ class Swig <Formula
   end
 
   def install
-    system "./configure", "--prefix=#{prefix}", 
+    system "./configure", "--prefix=#{prefix}",
                           "--disable-debug", "--disable-dependency-tracking",
                           # turns prefix/share/swig/1.3.40 into prefix/share/swig
                           # as versioned dirs are redundant with Homebrew
-                          "--with-swiglibdir=#{prefix}/share/swig"
+                          "--with-swiglibdir=#{share}/swig"
     system "make install"
   end
 end

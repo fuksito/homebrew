@@ -6,9 +6,8 @@ class Ncurses <Formula
   md5 'cce05daf61a64501ef6cd8da1f727ec6'
 
   def install
-    system "./configure", "--prefix=#{prefix}", 
-                          "--disable-debug", 
-                          "--disable-dependency-tracking",
+    system "./configure", "--disable-debug", "--disable-dependency-tracking",
+                          "--prefix=#{prefix}",
                           "--disable-echo",
                           "--without-ada",
                           "--enable-widec",
