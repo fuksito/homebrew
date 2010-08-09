@@ -5,10 +5,6 @@ class Swig <Formula
   homepage 'http://www.swig.org/'
   md5 '2df766c9e03e02811b1ab4bba1c7b9cc'
 
-  def patches
-    DATA
-  end
-
   def install
     system "./configure", "--prefix=#{prefix}",
                           "--disable-debug", "--disable-dependency-tracking",
