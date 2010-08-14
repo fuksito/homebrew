@@ -11,8 +11,6 @@ class Gcc <Formula
   depends_on 'mpfr'     # >= 2.4.2
   depends_on 'libmpc'   # >= 0.8.1
 
-  aka 'g++'
-
   # FIXME: I don't know ruby, and I am sure this is a much more elegant solution for this.
   def options
     ret = Array.new
@@ -27,7 +25,7 @@ class Gcc <Formula
     # Remove the built in flags to get it to build properly
     # TODO: LDFLAGS and CPPFLAGS probably don't need to be in here
     %w[MAKEFLAGS CFLAGS LDFLAGS CPPFLAGS CXXFLAGS CXX LD CC].each do |flag|
-      ENV.delete(flag)  
+      ENV.delete(flag)
     end
 
     # This is the default for OS X gcc.
@@ -61,9 +59,9 @@ class Gcc <Formula
     args =
       [
         "--disable-checking", "--enable-werror", "--prefix=#{prefix}",
-        "--mandir=#{man}", "--enable-languages=#{base_langs.uniq.join(',')}", 
+        "--mandir=#{man}", "--enable-languages=#{base_langs.uniq.join(',')}",
         "--program-transform-name=/^[cg][^.-]*$/s/$/-#{version.slice(/\d\.\d/)}/",
-        "--with-slibdir=#{lib}", "--build=i686-apple-darwin10", 
+        "--with-slibdir=#{lib}", "--build=i686-apple-darwin10",
         "--with-gxx-include-dir=#{include}/#{version}",
         "--host=i686-apple-darwin10", "--target=i686-apple-darwin10",
         "--with-gmp=#{gmp.prefix}", "--with-mpfr=#{mpfr.prefix}", "--with-mpc=#{libmpc.prefix}"
@@ -72,7 +70,7 @@ class Gcc <Formula
     system "./configure", *args
     system "make"
 
-    # TODO: Implement the make checks at some point. 
+    # TODO: Implement the make checks at some point.
     system "make install"
   end
 end
