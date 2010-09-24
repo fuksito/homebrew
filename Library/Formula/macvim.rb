@@ -23,7 +23,11 @@ class Macvim <Formula
            "--with-macsdk=#{MACOS_VERSION}",
            # Add some features
            "--with-features=huge",
+           "--enable-cscope",
+           "--enable-luainterp=dynamic",
+           "--enable-mzschemeinterp",
            "--enable-perlinterp",
+           "--enable-python3interp",
            "--enable-pythoninterp",
            "--enable-rubyinterp",
            "--enable-tclinterp"
