@@ -1,10 +1,13 @@
 require 'formula'
 
 class Vim <Formula
-  url 'ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2'
+  # Get stable versions from hg repo instead of downloading an increasing
+  # number of separate patches.
+  url 'https://vim.googlecode.com/hg/', :revision => '538cd32208'
+  version '7.3.011'
   homepage 'http://www.vim.org/'
-  md5 '5b9510a17074e2b37d8bb38ae09edbf2'
-  head 'http://vim.svn.sourceforge.net/svnroot/vim/trunk/'
+
+  head 'https://vim.googlecode.com/hg/'
 
   def install
     system "./configure", "--prefix=#{prefix}",
