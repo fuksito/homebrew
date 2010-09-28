@@ -27,7 +27,10 @@ class Llvm <Formula
 
     system "./configure", "--prefix=#{prefix}",
                           "--enable-targets=host-only",
-                          "--enable-optimized"
+                          "--enable-optimized",
+                          "--enable-bindings=none",
+                          "--disable-assertions",
+                          "--enable-shared"
     system "make" # seperate steps required, otherwise the build fails
     system "make install"
 
