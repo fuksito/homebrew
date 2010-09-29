@@ -1,12 +1,11 @@
 require 'formula'
 
 class Fossil <Formula
-<<<<<<< HEAD
   url 'http://www.fossil-scm.org/download/fossil-src-20100918155143.tar.gz'
+<<<<<<< HEAD
 =======
-  url 'http://www.fossil-scm.org/download/fossil-src-20100805100943.tar.gz'
   head 'fossil://http://www.fossil-scm.org/'
->>>>>>> The to-be-implemented format of fossil repo support.
+>>>>>>> Updated fossil version to 20100918155143
   homepage 'http://www.fossil-scm.org/'
   md5 'fca02199e1795114212eb588e2d9aa8c'
 
