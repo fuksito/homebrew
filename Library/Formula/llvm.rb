@@ -34,11 +34,7 @@ class Llvm <Formula
     system "make" # seperate steps required, otherwise the build fails
     system "make install"
 
-    if build_clang?
-      Dir.chdir clang_dir do
-        system "make install"
-      end
-    end
+    # FIXME: obj and src files!
   end
 
   def caveats; <<-EOS
