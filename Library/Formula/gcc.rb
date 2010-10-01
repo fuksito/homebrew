@@ -1,9 +1,9 @@
 require 'formula'
 
 class Gcc <Formula
-  url 'ftp://ftp.gnu.org/gnu/gcc/gcc-4.5.0/gcc-4.5.0.tar.bz2'
+  url 'http://ftp.gnu.org/gnu/gcc/gcc-4.5.1/gcc-4.5.1.tar.bz2'
   homepage 'http://gcc.gnu.org'
-  md5 'ff27b7c4a5d5060c8a8543a44abca31f'
+  md5 '48231a8e33ed6e058a341c53b819de1a'
 
   depends_on 'autoconf' # >= 2.64
   depends_on 'automake' # >= 1.11.1
@@ -58,13 +58,17 @@ class Gcc <Formula
     # Attempt to mimic default OS X configure options.
     args =
       [
-        "--disable-checking", "--enable-werror", "--prefix=#{prefix}",
-        "--mandir=#{man}", "--enable-languages=#{base_langs.uniq.join(',')}",
-        "--program-transform-name=/^[cg][^.-]*$/s/$/-#{version.slice(/\d\.\d/)}/",
-        "--with-slibdir=#{lib}", "--build=i686-apple-darwin10",
+        "--disable-checking",
+        "--enable-werror",
+        "--prefix=#{prefix}",
+        "--mandir=#{man}",
+        "--enable-languages=#{base_langs.uniq.join(',')}",
+        "--program-suffix=-4.5",
+        "--with-slibdir=#{lib}",
         "--with-gxx-include-dir=#{include}/#{version}",
-        "--host=i686-apple-darwin10", "--target=i686-apple-darwin10",
-        "--with-gmp=#{gmp.prefix}", "--with-mpfr=#{mpfr.prefix}", "--with-mpc=#{libmpc.prefix}"
+        "--with-gmp=#{gmp.prefix}",
+        "--with-mpfr=#{mpfr.prefix}",
+        "--with-mpc=#{libmpc.prefix}"
       ]
 
     system "./configure", *args
