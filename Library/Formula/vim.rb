@@ -15,6 +15,7 @@ class Vim <Formula
                           "--with-tlib=ncurses",
                           "--enable-pythoninterp",
                           "--enable-rubyinterp",
+                          "--with-ruby-command=/usr/bin/ruby", # ruby 1.9 won't work
                           "--with-features=huge"
     system "make"
     system "make install"
