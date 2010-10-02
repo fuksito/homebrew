@@ -1,13 +1,9 @@
 require 'formula'
 
 class Vim <Formula
-  # Get stable versions from hg repo instead of downloading an increasing
-  # number of separate patches.
-  url 'https://vim.googlecode.com/hg/', :revision => '538cd32208'
-  version '7.3.011'
-  homepage 'http://www.vim.org/'
-
+  # Actually vim HEAD is always stable
   head 'https://vim.googlecode.com/hg/'
+  homepage 'http://www.vim.org/'
 
   def install
     system "./configure", "--prefix=#{prefix}",
