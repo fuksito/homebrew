@@ -23,18 +23,12 @@ class Gcc <Formula
 
   def install
     # Remove the built in flags to get it to build properly
-    # TODO: LDFLAGS and CPPFLAGS probably don't need to be in here
     %w[MAKEFLAGS CFLAGS LDFLAGS CPPFLAGS CXXFLAGS CXX LD CC].each do |flag|
       ENV.delete(flag)
     end
 
     # This is the default for OS X gcc.
     base_langs = ['c', 'objc', 'c++', 'obj-c++']
-
-    # Get the prefixs' for the already installed dependencies.
-    gmp = Formula.factory 'gmp'
-    mpfr = Formula.factory 'mpfr'
-    libmpc = Formula.factory 'libmpc'
 
     # FIXME: Create a better, more ruby, way format for this.
     ARGV.each do |arg|
@@ -66,9 +60,9 @@ class Gcc <Formula
         "--program-suffix=-4.5",
         "--with-slibdir=#{lib}",
         "--with-gxx-include-dir=#{include}/#{version}",
-        "--with-gmp=#{gmp.prefix}",
-        "--with-mpfr=#{mpfr.prefix}",
-        "--with-mpc=#{libmpc.prefix}"
+        "--with-gmp=#{HOMEBREW_PREFIX}",
+        "--with-mpfr=#{HOMEBREW_PREFIX}",
+        "--with-mpc=#{HOMEBREW_PREFIX}"
       ]
 
     system "./configure", *args
