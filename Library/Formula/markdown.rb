@@ -6,6 +6,6 @@ class Markdown <Formula
   md5 'f17b3c2b2830c6fd2fe0098226e59a2f'
 
   def install
-    bin.install 'Markdown.pl' => 'markdown'
+    bin.install 'Markdown.pl' => 'markdown.pl'
   end
 end
