@@ -18,7 +18,8 @@ class Libcaca <Formula
                           "--disable-imlib2",
                           "--disable-doc",
                           "--disable-slang",
-                          "--disable-java"
+                          "--disable-java",
+                          "--disable-ruby" # temporary fix
     system "make install"
   end
 end
