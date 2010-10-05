@@ -10,6 +10,7 @@ class DocbookToMan <Formula
   depends_on 'opensp'
 
   def install
+    mkdir_p bin
     mkdir_p lib
     system "make install ROOT=#{prefix}"
   end
