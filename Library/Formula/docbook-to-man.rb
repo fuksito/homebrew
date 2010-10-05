@@ -6,6 +6,9 @@ class DocbookToMan <Formula
   homepage 'http://www.oasis-open.org/docbook/tools/dtm/'
   md5 'b28ddaaa8eb4b775100c67fd1205240a'
 
+  depends_on 'docbook'
+  depends_on 'opensp'
+
   def install
     mkdir_p lib
     system "make install ROOT=#{prefix}"
