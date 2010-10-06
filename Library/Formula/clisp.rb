@@ -43,6 +43,6 @@ class Clisp <Formula
   end
 
   def test
-    system "clisp"
+    system "clisp --version"
   end
 end
