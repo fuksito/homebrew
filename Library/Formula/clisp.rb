@@ -5,24 +5,44 @@ class Clisp <Formula
   homepage 'http://clisp.cons.org/'
   md5 '1962b99d5e530390ec3829236d168649'
 
-  depends_on 'readline'
+  depends_on 'libiconv'
   depends_on 'libsigsegv'
+  depends_on 'readline'
+
+  skip_clean :all # otherwise abort trap
 
   def install
     # This build isn't parallel safe.
     ENV.j1
-    # Clisp will handle optimization flags by its own.
-    ENV.no_optimization
-    # This build is i386 only, because it uses inline asm.
-    # ENV.m32 doesn't work, this is from http://trac.macports.org/browser/trunk/dports/lang/clisp/Portfile
-    ENV['CC'] = "#{ENV.cc} -arch i386"
+
+    # Clisp requires to select word size explicitly this way,
+    # set it in CFLAGS won't work.
+    ENV['CC'] = "#{ENV.cc} -m#{snow_leopard_64? ? 64 : 32}"
 
     system "./configure", "--prefix=#{prefix}",
                           "--with-readline=yes"
+
     cd "src" do
+      # Multiple -O options will be in the generated Makefile,
+      # make Homebrew's the last such option so it's effective.
+      inreplace "Makefile" do |mk|
+        cf = mk.get_make_var("CFLAGS")
+        cf.gsub! ENV['CFLAGS'], ''
+        cf += ' '+ENV['CFLAGS']
+        mk.change_make_var! 'CFLAGS', cf
+      end
+
+      # The ulimit must be set, otherwise `make` will fail and tell you to do so
       system "ulimit -s 16384 && make"
+
+      # Considering the complexity of this package, a self-check is highly recommended.
       system "make check"
+
       system "make install"
     end
+  end
+
+  def test
+    system "clisp"
   end
 end
