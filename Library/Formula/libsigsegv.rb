@@ -6,7 +6,6 @@ class Libsigsegv <Formula
   md5 'ebe554e26870d8bc200ef3e3539ffd7c'
 
   def install
-    ENV.universal_binary if snow_leopard_64?
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
     system "make"
