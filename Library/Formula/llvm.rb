@@ -12,6 +12,7 @@ class Llvm <Formula
   url       'http://llvm.org/releases/2.8/llvm-2.8.tgz'
   homepage  'http://llvm.org/'
   md5       '220d361b4d17051ff4bb21c64abe05ba'
+  # TODO: add head here
 
   def options
     [['--with-clang', 'Also build & install clang']]
