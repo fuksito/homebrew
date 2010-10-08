@@ -57,7 +57,7 @@ class Llvm <Formula
       system "make install"
     end
 
-    # TODO: comment
+    # Install files in LLVM_SRC_DIR and LLVM_OBJ_DIR, they're necessary for llvm to compile some targets, e.g. llvm-gcc
     src_dir = prefix+'lib/llvm/src'
     obj_dir = prefix+'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
