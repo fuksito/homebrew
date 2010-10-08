@@ -53,6 +53,7 @@ class Llvm <Formula
                             "--enable-optimized",
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
+      system "make"
       system "make install"
     end
 
@@ -78,7 +79,7 @@ class Llvm <Formula
       end
       # pre-compile Python scripts
       for opt_arg in ['', '-O'] do
-        system *"/usr/bin/env python #{opt_arg} -m compileall #{libexec}".split
+        system "/usr/bin/env python #{opt_arg} -m compileall #{libexec}"
       end
     end
   end
