@@ -1,10 +1,7 @@
 require 'formula'
 
 def build_clang?
-  ARGV.include? '--with-clang' or clang_cnalyzer?
-end
-def clang_analyzer?
-  ARGV.include '--with-clang-analyzer'
+  ARGV.include? '--with-clang'
 end
 def all_targets?
   ARGV.include? '--enable-all-targets'
@@ -28,8 +25,7 @@ class Llvm <Formula
 
   def options
     [
-        ['--with-clang', 'Also build and install clang'],
-        ['--with-clang-analyzer', 'Also build and install clang static analyzer'],
+        ['--with-clang', 'Build and install clang and clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
         ['--enable-ocaml-binding', 'Enable Ocaml language binding']
     ]
@@ -38,7 +34,7 @@ class Llvm <Formula
   depends_on 'objective-caml' if ocaml_binding?
 
   def install
-    fail_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
+    fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
 
     if build_clang?
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
@@ -70,13 +66,9 @@ class Llvm <Formula
       s.gsub! config_path, src_dir.realpath
     end
 
-    if clang_analyzer?
-      cd 'tools/clang/tools' do
-        config_path=Pathname(Dir.pwd)
-        for tool in ['scan-build', 'scan-view'] do
-          (prefix/'lib/
-      end
-    end
+    system "false"
+
+    # TODO: static analyzer
   end
 
   def caveats; <<-EOS
