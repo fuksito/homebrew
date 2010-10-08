@@ -3,7 +3,6 @@ require 'formula'
 def build_clang?; ARGV.include? '--with-clang'; end
 def all_targets?; ARGV.include? '--enable-all-targets'; end
 def ocaml_binding?; ARGV.include? '--enable-ocaml-binding'; end
-def enable_libffi?; ARGV.include? '--enable-libffi'; end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -22,29 +21,26 @@ class Llvm <Formula
     [
         ['--with-clang', 'Also build and install clang'],
         ['--all-targets', 'Build non-host targets'],
-        ['--enable-ocaml-binding', 'Enable Ocaml language binding'],
-        ['--enable-libffi', 'Depend on libffi to allow the LLVM interpreter to call external functions']
+        ['--enable-ocaml-binding', 'Enable Ocaml language binding']
     ]
   end
 
   depends_on 'objective-caml' if ocaml_binding?
-  depends_on 'libffi' if enable_libffi?
 
   def install
     if build_clang?
-      clang_dir = Pathname.new(Dir.pwd)+'tools/clang'
+      clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new.brew { clang_dir.install Dir['*'] }
     end
 
-    cur_path = Dir.pwd
-    build_path = cur_path + 'build'
-
+    cur_path = Pathname(Dir.pwd)
+    build_path = cur_path/'build'
     mkdir build_path
     cd build_path do
-      system "./configure", "--prefix=#{prefix}",
+      system "../configure", "--prefix=#{prefix}",
                             "--disable-assertions",
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
-                            "--enable-libffi=#{enable_libffi? ? 'YES':'NO'}",
+                            "--enable-libffi",
                             "--enable-optimized",
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
@@ -52,8 +48,8 @@ class Llvm <Formula
       system "make install"
     end
 
-    src_dir = prefix+'lib/llvm/src'
-    obj_dir = prefix+'lib/llvm/obj'
+    src_dir = prefix/'lib/llvm/src'
+    obj_dir = prefix/'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
     cp_r cur_path+'include', src_dir
     cp_r [build_path+'include', build_path+'Release', build_path+'Makefile.config'], obj_dir
