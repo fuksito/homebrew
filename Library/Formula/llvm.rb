@@ -53,13 +53,12 @@ class Llvm <Formula
     mkdir_p [src_dir, obj_dir]
     cp_r cur_path+'include', src_dir
     cp_r [build_path+'include', build_path+'Release', build_path+'Makefile.config'], obj_dir
+    rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
 
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
-      s.gsub! cur_path, src_dir
-      s.gsub! build_path, obj_dir
+      s.gsub! build_path, obj_dir.realpath
+      s.gsub! cur_path, src_dir.realpath
     end
-
-#    rm_f Dir["#{prefix}/**/.dir"]
   end
 
   def caveats; <<-EOS
