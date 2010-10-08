@@ -71,7 +71,7 @@ class Llvm <Formula
 
     # Install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
     if build_clang?
-      dest_dir = lib+'clang-analyzer'
+      dest_dir = libexec+'clang-analyzer'
       for tool in ['scan-build', 'scan-view'] do
         dest_dir.install Dir["tools/clang/tools/#{tool}/*"]
         # create relative symbol link in bin
@@ -79,9 +79,12 @@ class Llvm <Formula
       end
       # pre-compile Python scripts
       for opt_arg in ['', '-O'] do
-        system "/usr/bin/env python #{opt_arg}", "-m compileall", dest_dir
+        system "/usr/bin/env python #{opt_arg} -m compileall #{dest_dir}"
       end
-      lns (dest_dir+'bin/clang')
+      # relative symbol link to clang to prevent the "'clang' executable not found" warning message
+      mkdir dest_dir+'bin'
+      ln_s bin+'clang', dest_dir+'bin/clang'
+      ln_s 'clang', dest_dir+'bin/clang++'
     end
   end
 
