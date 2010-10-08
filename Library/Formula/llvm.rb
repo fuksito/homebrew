@@ -1,8 +1,17 @@
 require 'formula'
 
-def build_clang?; ARGV.include? '--with-clang'; end
-def all_targets?; ARGV.include? '--enable-all-targets'; end
-def ocaml_binding?; ARGV.include? '--enable-ocaml-binding'; end
+def build_clang?
+  ARGV.include? '--with-clang' or clang_cnalyzer?
+end
+def clang_analyzer?
+  ARGV.include '--with-clang-analyzer'
+end
+def all_targets?
+  ARGV.include? '--enable-all-targets'
+end
+def ocaml_binding?
+  ARGV.include? '--enable-ocaml-binding'
+end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -20,6 +29,7 @@ class Llvm <Formula
   def options
     [
         ['--with-clang', 'Also build and install clang'],
+        ['--with-clang-analyzer', 'Also build and install clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
         ['--enable-ocaml-binding', 'Enable Ocaml language binding']
     ]
@@ -28,36 +38,44 @@ class Llvm <Formula
   depends_on 'objective-caml' if ocaml_binding?
 
   def install
+    fail_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
+
     if build_clang?
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new.brew { clang_dir.install Dir['*'] }
     end
 
-    cur_path = Pathname(Dir.pwd)
-    build_path = cur_path/'build'
-    mkdir build_path
+    config_path = Pathname(Dir.pwd)
+    build_path = mktemp
     cd build_path do
-      system "../configure", "--prefix=#{prefix}",
+      system "#{config_path}/configure", "--prefix=#{prefix}",
                             "--disable-assertions",
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
                             "--enable-libffi",
                             "--enable-optimized",
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
-      system "make" # seperate steps required, otherwise the build fails
       system "make install"
     end
 
     src_dir = prefix/'lib/llvm/src'
     obj_dir = prefix/'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
-    cp_r cur_path+'include', src_dir
+    cp_r config_path+'include', src_dir
     cp_r [build_path+'include', build_path+'Release', build_path+'Makefile.config'], obj_dir
     rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
 
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
       s.gsub! build_path, obj_dir.realpath
-      s.gsub! cur_path, src_dir.realpath
+      s.gsub! config_path, src_dir.realpath
+    end
+
+    if clang_analyzer?
+      cd 'tools/clang/tools' do
+        config_path=Pathname(Dir.pwd)
+        for tool in ['scan-build', 'scan-view'] do
+          (prefix/'lib/
+      end
     end
   end
 
