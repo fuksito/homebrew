@@ -38,7 +38,7 @@ class Llvm <Formula
 
     if build_clang?
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
-      Clang.new.brew { clang_dir.install Dir['*'] }
+      Clang.new('clang').brew { clang_dir.install Dir['*'] }
     end
 
     source_dir = Pathname(Dir.pwd)
