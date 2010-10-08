@@ -55,7 +55,8 @@ class FormulaInstaller
     return unless f.external_deps
 
     f.external_deps[:python].each do |dep|
-      raise pyerr(dep) unless quiet_system "/usr/bin/env", "python", "-c", "import #{dep}"
+      require 'formula'
+      raise pyerr(dep) unless /^#{dep}==/.match `/usr/bin/env pip freeze`
     end
     f.external_deps[:perl].each do |dep|
       raise plerr(dep) unless quiet_system "/usr/bin/env", "perl", "-e", "use #{dep}"
