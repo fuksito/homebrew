@@ -56,13 +56,13 @@ class Llvm <Formula
       system "make install"
     end
 
+    # TODO: comment
     src_dir = prefix+'lib/llvm/src'
     obj_dir = prefix+'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
     cp_r source_dir+'include', src_dir
     cp_r [build_dir+'include', build_dir+'Release', build_dir+'Makefile.config'], obj_dir
     rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
-
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
       s.gsub! build_dir, obj_dir.realpath
       s.gsub! source_dir, src_dir.realpath
@@ -73,12 +73,12 @@ class Llvm <Formula
       for tool in ['scan-build', 'scan-view'] do
         dest_dir = libexec+tool
         dest_dir.install Dir["tools/clang/tools/#{tool}/*"]
-        ln_s dest_dir+tool, bin
+        # create relative symbol link in bin
+        ln_s (dest_dir+tool).relative_path_from(bin), bin
       end
       # pre-compile Python scripts
       for opt_arg in ['', '-O'] do
-        system 'usr/bin/env python', opt_arg, '-m',
-               'compileall', libexec
+        system *"/usr/bin/env python #{opt_arg} -m compileall #{libexec}".split
       end
     end
   end
@@ -88,5 +88,9 @@ class Llvm <Formula
         $ brew rm llvm
         $ brew install llvm
     EOS
+  end
+
+  def test
+    system 'llvm-config'
   end
 end
