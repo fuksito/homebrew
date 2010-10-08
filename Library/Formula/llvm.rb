@@ -42,8 +42,10 @@ class Llvm <Formula
     end
 
     config_path = Pathname(Dir.pwd)
-    build_path = mktemp
+    build_path = config_path+'../build'
+    mkdir build_path
     cd build_path do
+      build_path = Pathname(Dir.pwd)
       system "#{config_path}/configure", "--prefix=#{prefix}",
                             "--disable-assertions",
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
@@ -54,8 +56,8 @@ class Llvm <Formula
       system "make install"
     end
 
-    src_dir = prefix/'lib/llvm/src'
-    obj_dir = prefix/'lib/llvm/obj'
+    src_dir = prefix+'lib/llvm/src'
+    obj_dir = prefix+'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
     cp_r config_path+'include', src_dir
     cp_r [build_path+'include', build_path+'Release', build_path+'Makefile.config'], obj_dir
