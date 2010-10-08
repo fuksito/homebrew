@@ -69,18 +69,19 @@ class Llvm <Formula
       s.gsub! source_dir, src_dir.realpath
     end
 
+    # Install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
     if build_clang?
-      # install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
+      dest_dir = lib+'clang-analyzer'
       for tool in ['scan-build', 'scan-view'] do
-        dest_dir = libexec+tool
         dest_dir.install Dir["tools/clang/tools/#{tool}/*"]
         # create relative symbol link in bin
         ln_s (dest_dir+tool).relative_path_from(bin), bin
       end
       # pre-compile Python scripts
       for opt_arg in ['', '-O'] do
-        system "/usr/bin/env python #{opt_arg} -m compileall #{libexec}"
+        system "/usr/bin/env python #{opt_arg}", "-m compileall", dest_dir
       end
+      lns (dest_dir+'bin/clang')
     end
   end
 
