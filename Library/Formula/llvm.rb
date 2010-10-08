@@ -71,7 +71,9 @@ class Llvm <Formula
     if build_clang?
       # install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
       for tool in ['scan-build', 'scan-view'] do
-        (libexec+tool).install Dir["tools/clang/tools/#{tool}/*"]
+        dest_dir = libexec+tool
+        dest_dir.install Dir["tools/clang/tools/#{tool}/*"]
+        ln_s dest_dir+tool, bin
       end
       # pre-compile Python scripts
       for opt_arg in ['', '-O'] do
