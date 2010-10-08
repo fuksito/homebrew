@@ -61,10 +61,10 @@ class FormulaInstaller
       raise plerr(dep) unless quiet_system "/usr/bin/env", "perl", "-e", "use #{dep}"
     end
     f.external_deps[:ruby].each do |dep|
-      raise rberr(dep) unless quiet_system "/usr/bin/env", "ruby", "-rubygems", "-e", "require '#{dep}'"
+      raise rberr(dep) unless quiet_system "/usr/bin/env", "gem", "contents", dep
     end
     f.external_deps[:jruby].each do |dep|
-      raise rberr(dep) unless quiet_system "/usr/bin/env", "jruby", "-rubygems", "-e", "require '#{dep}'"
+      raise rberr(dep) unless quiet_system "/usr/bin/env", "jgem", "contents", dep
     end
   end
 
