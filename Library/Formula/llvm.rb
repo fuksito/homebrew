@@ -3,7 +3,7 @@ require 'formula'
 def build_clang?; ARGV.include? '--with-clang'; end
 def all_targets?; ARGV.include? '--enable-all-targets'; end
 def ocaml_binding?; ARGV.include? '--enable-ocaml-binding'; end
-def enable_libffi?; ARGV.include '--enable-libffi'; end
+def enable_libffi?; ARGV.include? '--enable-libffi'; end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -21,14 +21,14 @@ class Llvm <Formula
   def options
     [
         ['--with-clang', 'Also build and install clang'],
-        ['--all-targets', 'Build non-host targets]',
+        ['--all-targets', 'Build non-host targets'],
         ['--enable-ocaml-binding', 'Enable Ocaml language binding'],
-        ['--enable-libffi','Depend on libffi to allow the LLVM interpreter to call external functions']
+        ['--enable-libffi', 'Depend on libffi to allow the LLVM interpreter to call external functions']
     ]
   end
 
-  depends_on 'ocaml' if ocaml_bindings?
-  depends_on 'libffi' if enable_ffi?
+  depends_on 'objective-caml' if ocaml_binding?
+  depends_on 'libffi' if enable_libffi?
 
   def install
     if build_clang?
@@ -43,10 +43,11 @@ class Llvm <Formula
     cd build_path do
       system "./configure", "--prefix=#{prefix}",
                             "--disable-assertions",
-                            "--enable-bindings=#{ocaml_binding?'ocaml':'none'}",
+                            "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
+                            "--enable-libffi=#{enable_libffi? ? 'YES':'NO'}",
                             "--enable-optimized",
                             "--enable-shared",
-                            "--enable-targets=#{all_targets?'all':'host-only'}"
+                            "--enable-targets=#{all_targets? ? 'all':'host-only'}"
       system "make" # seperate steps required, otherwise the build fails
       system "make install"
     end
