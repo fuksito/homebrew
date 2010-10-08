@@ -164,7 +164,11 @@ class Formula
   # rarely, you don't want your library symlinked into the main prefix
   # see gettext.rb for an example
   def keg_only?
-    self.class.keg_only_reason || false
+    if ARGV.include? '--keg-only'
+      'You specified --keg-only in argument list'
+    else
+      self.class.keg_only_reason || false
+    end
   end
 
   # sometimes the clean process breaks things
