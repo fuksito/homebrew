@@ -70,12 +70,11 @@ class Llvm <Formula
 
     system "false"
 
-    # TODO: static analyzer
+    for tool in ['scan-build', 'scan-view'] do
   end
 
   def caveats; <<-EOS
-    If you already have LLVM installed, then "brew upgrade llvm" might not
-    work. Instead, try:
+    If you already have pre-2.8 LLVM installed, then "brew upgrade llvm" might not work. Instead, try:
         $ brew rm llvm
         $ brew install llvm
     EOS
