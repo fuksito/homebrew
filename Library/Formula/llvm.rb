@@ -41,12 +41,12 @@ class Llvm <Formula
       Clang.new.brew { clang_dir.install Dir['*'] }
     end
 
-    config_path = Pathname(Dir.pwd)
-    build_path = config_path+'../build'
-    mkdir build_path
-    cd build_path do
-      build_path = Pathname(Dir.pwd)
-      system "#{config_path}/configure", "--prefix=#{prefix}",
+    source_dir = Pathname(Dir.pwd)
+    build_dir = source_dir+'../build'
+    mkdir build_dir
+    cd build_dir do
+      build_dir = Pathname(Dir.pwd)
+      system "#{source_dir}/configure", "--prefix=#{prefix}",
                             "--disable-assertions",
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
                             "--enable-libffi",
@@ -59,13 +59,13 @@ class Llvm <Formula
     src_dir = prefix+'lib/llvm/src'
     obj_dir = prefix+'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
-    cp_r config_path+'include', src_dir
-    cp_r [build_path+'include', build_path+'Release', build_path+'Makefile.config'], obj_dir
+    cp_r source_dir+'include', src_dir
+    cp_r [build_dir+'include', build_dir+'Release', build_dir+'Makefile.config'], obj_dir
     rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
 
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
-      s.gsub! build_path, obj_dir.realpath
-      s.gsub! config_path, src_dir.realpath
+      s.gsub! build_dir, obj_dir.realpath
+      s.gsub! source_dir, src_dir.realpath
     end
 
     if build_clang?
