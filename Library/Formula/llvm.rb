@@ -68,9 +68,17 @@ class Llvm <Formula
       s.gsub! config_path, src_dir.realpath
     end
 
-    system "false"
-
-    for tool in ['scan-build', 'scan-view'] do
+    if build_clang?
+      # install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
+      for tool in ['scan-build', 'scan-view'] do
+        (libexec+tool).install Dir["tools/clang/tools/#{tool}/*"]
+      end
+      # pre-compile Python scripts
+      for opt_arg in ['', '-O'] do
+        system 'usr/bin/env python', opt_arg, '-m',
+               'compileall', libexec
+      end
+    end
   end
 
   def caveats; <<-EOS
