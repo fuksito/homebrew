@@ -33,6 +33,8 @@ class Llvm <Formula
 
   depends_on 'objective-caml' if ocaml_binding?
 
+  skip_clean :all
+
   def install
     fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
 
@@ -40,6 +42,9 @@ class Llvm <Formula
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new('clang').brew { clang_dir.install Dir['*'] }
     end
+#    if ocaml_binding?
+#      inreplace 'bindings/ocaml/Makefile.ocaml', '$(PROJ_libdir)', lib
+#    end
 
     source_dir = Pathname(Dir.pwd)
     build_dir = source_dir+'../build'
@@ -54,7 +59,7 @@ class Llvm <Formula
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
       system "make"
-      system "make install"
+      system "make OVERRIDE_libdir=#{lib} install"
     end
 
     # Install files in LLVM_SRC_DIR and LLVM_OBJ_DIR, they're necessary for llvm to compile some targets, e.g. llvm-gcc
@@ -65,8 +70,8 @@ class Llvm <Formula
     cp_r [build_dir+'include', build_dir+'Release', build_dir+'Makefile.config'], obj_dir
     rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
-      s.gsub! build_dir, obj_dir.realpath
-      s.gsub! source_dir, src_dir.realpath
+      s.gsub! build_dir, obj_dir
+      s.gsub! source_dir, src_dir
     end
 
     # Install Clang Static Analyzer (http://clang-analyzer.llvm.org/)
