@@ -42,9 +42,6 @@ class Llvm <Formula
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new('clang').brew { clang_dir.install Dir['*'] }
     end
-#    if ocaml_binding?
-#      inreplace 'bindings/ocaml/Makefile.ocaml', '$(PROJ_libdir)', lib
-#    end
 
     source_dir = Pathname(Dir.pwd)
     build_dir = source_dir+'../build'
@@ -59,14 +56,16 @@ class Llvm <Formula
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
       system "make"
-      system "make OVERRIDE_libdir=#{lib} install"
+      system "make install"
     end
 
     # Install files in LLVM_SRC_DIR and LLVM_OBJ_DIR, they're necessary for llvm to compile some targets, e.g. llvm-gcc
+    # What to copy is roughly the same as MacPorts did
     src_dir = prefix+'lib/llvm/src'
     obj_dir = prefix+'lib/llvm/obj'
     mkdir_p [src_dir, obj_dir]
     cp_r source_dir+'include', src_dir
+    rm_r [build_dir+'Release/lib/ocaml'] if ocaml_binding? # duplicated
     cp_r [build_dir+'include', build_dir+'Release', build_dir+'Makefile.config'], obj_dir
     rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
     inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
