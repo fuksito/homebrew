@@ -44,7 +44,7 @@ class Llvm <Formula
     end
 
     source_dir = Pathname(Dir.pwd)
-    build_dir = source_dir+'../build'
+    build_dir = source_dir+'build'
     mkdir build_dir
     cd build_dir do
       build_dir = Pathname(Dir.pwd)
