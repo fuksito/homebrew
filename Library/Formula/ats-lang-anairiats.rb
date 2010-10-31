@@ -15,4 +15,17 @@ class AtsLangAnairiats <Formula
     system "make all"
     system "make install"
   end
+
+  def caveats
+    <<-EOS.undent
+    In order to use ATS/GTK, you must have gtk+ installed. To do so, run:
+      $ brew install gtk
+    In order to use ATK/Cairo, you must have cairo installed. To do so, run:
+      $ brew install cairo
+    EOS
+  end
+
+  def test
+    system "atscc --version"
+  end
 end
