@@ -5,22 +5,37 @@ class Libiconv <Formula
   homepage 'http://www.gnu.org/software/libiconv/'
   md5 '7ab33ebd26687c744a37264a330bbe9a'
 
-  def keg_only?
-    :provided_by_osx
-  end
+  keg_only :provided_by_osx
 
   def patches
     { :p1 => [
       'http://svn.macports.org/repository/macports/trunk/dports/textproc/libiconv/files/patch-Makefile.devel',
       'http://svn.macports.org/repository/macports/trunk/dports/textproc/libiconv/files/patch-utf8mac.diff',
-      'http://gist.github.com/raw/355571/2fac6d8b7471e4787748f6335ff062908ec0fdc2/gistfile1.txt']
-    }
+      DATA
+    ]}
   end
 
   def install
     ENV.j1
-    system "./configure", "--disable-debug", "--disable-dependency-tracking", "--prefix=#{prefix}", "--enable-extra-encodings"
+    system "./configure", "--disable-debug", "--disable-dependency-tracking",
+                          "--prefix=#{prefix}",
+                          "--enable-extra-encodings"
     system "make -f Makefile.devel"
     system "make install"
   end
 end
+
+
+__END__
+diff --git a/lib/flags.h b/lib/flags.h
+index d7cda21..4cabcac 100644
+--- a/lib/flags.h
++++ b/lib/flags.h
+@@ -14,6 +14,7 @@
+ 
+ #define ei_ascii_oflags (0)
+ #define ei_utf8_oflags (HAVE_ACCENTS | HAVE_QUOTATION_MARKS | HAVE_HANGUL_JAMO)
++#define ei_utf8mac_oflags (HAVE_ACCENTS | HAVE_QUOTATION_MARKS | HAVE_HANGUL_JAMO)
+ #define ei_ucs2_oflags (HAVE_ACCENTS | HAVE_QUOTATION_MARKS | HAVE_HANGUL_JAMO)
+ #define ei_ucs2be_oflags (HAVE_ACCENTS | HAVE_QUOTATION_MARKS | HAVE_HANGUL_JAMO)
+ #define ei_ucs2le_oflags (HAVE_ACCENTS | HAVE_QUOTATION_MARKS | HAVE_HANGUL_JAMO)
