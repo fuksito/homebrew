@@ -78,7 +78,7 @@ class Gfortran <Formula
   end
 
   def caveats
-    caveats = <<-EOS
+    caveats = <<-'EOS'
 Fortran compiler support in brews is currently experimental.  One of the
 consequences of this is that Homebrew does not set environment flags to ensure
 that a particular Fortran compiler is used and that the resulting code is
@@ -90,7 +90,7 @@ Fortran-based brews should also specify environment variables for the Fortran
 compiler in the install section:
 
     # Select the Fortran compiler to be used:
-    ENV["FC"] = ENV["F77"] "\#{HOMEBREW_PREFIX}/bin/gfortran"
+    ENV["FC"] = ENV["F77"] = "#{HOMEBREW_PREFIX}/bin/gfortran"
 
     # Set Fortran optimization flags:
     ENV["FFLAGS"] = ENV["FCFLAGS"] = ENV["CFLAGS"]
