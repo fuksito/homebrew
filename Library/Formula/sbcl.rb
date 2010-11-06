@@ -12,6 +12,9 @@ class Sbcl < Formula
   homepage 'http://www.sbcl.org/'
   md5 '2b125844371881a99cfdf63c286e74cd'
 
+  skip_clean 'bin'
+  skip_clean 'lib'
+
   def install
     original_path = pwd
     puts "original_path=#{original_path}"
