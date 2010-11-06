@@ -19,23 +19,29 @@ class Sbcl < Formula
       # install 1.0.29 to a temporary location
       binary_path = pwd
       SbclBinary.new('sbcl-binary').brew do
-        ENV['INSTALL_ROOT'] = binary_path
-        system "sh install.sh"
-        puts "binary_path=#{binary_path}"
+        install_sbcl binary_path
       end
-      # use the temporary binary SBCL in build
-      ENV.prepend 'PATH', "#{binary_path}/bin", ':'
-      ENV['SBCL_HOME'] = "#{binary_path}/lib/sbcl"
       # build and install 1.0.43
       cd original_path do
-        system "sh make.sh --prefix=#{prefix}"
+        system "env",
+               "PATH=#{binary_path}/bin:#{ENV['PATH']}",
+               "SBCL_HOME=#{binary_path}/lib/sbcl",
+               "sh",
+               "make.sh",
+               "--prefix=#{prefix}"
         cd 'tests' do
           system "sh run-tests.sh"
         end
-        ENV['INSTALL_ROOT'] = prefix
-        system "sh install.sh"
+        install_sbcl prefix
       end
     end
+  end
+
+  def install_sbcl path
+    system "env",
+           "INSTALL_ROOT=#{path}",
+           "sh",
+           "install.sh"
   end
 
 end
