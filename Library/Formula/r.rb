@@ -1,15 +1,22 @@
 require 'formula'
 
+def which_gfortran
+  `/usr/bin/which gfortran`.strip
+end
+
 class R <Formula
   url 'http://cran.r-project.org/src/base/R-2/R-2.11.1.tar.gz'
   homepage 'http://www.R-project.org/'
   md5 '7421108ade3e9223263394b9bbe277ce'
 
-  depends_on 'gfortran'
+  depends_on 'gfortran' if which_gfortran.empty?
 
   def install
-    ENV["FCFLAGS"] = ENV["CFLAGS"]
-    ENV["FFLAGS"]  = ENV["CFLAGS"]
+    # Select the Fortran compiler to be used:
+    ENV["FC"] = ENV["F77"] = which_gfortran
+
+    # Set Fortran optimization flags:
+    ENV["FFLAGS"] = ENV["FCFLAGS"] = ENV["CFLAGS"]
 
     system "./configure", "--prefix=#{prefix}", "--with-aqua", "--enable-R-framework",
            "--with-lapack"
