@@ -1,9 +1,9 @@
 require 'formula'
 
 class Mercurial <Formula
-  url 'http://mercurial.selenic.com/release/mercurial-1.6.tar.gz'
+  url 'http://mercurial.selenic.com/release/mercurial-1.6.4.tar.gz'
   homepage 'http://mercurial.selenic.com/downloads/'
-  md5 'e97772cb424d29d9382c41daafa6f92d'
+  md5 '657dd6aff80aa9a3b187652a635544d0'
 
   def install
     # Make Mercurial into the Cellar.
@@ -22,5 +22,8 @@ class Mercurial <Formula
     inreplace bin+'hg', %r[#!/.*/python], '#!/usr/bin/env python'
 
     # We now have a self-contained Mercurial install.
+
+    # Install some contribs
+    bin.install 'contrib/hgk'
   end
 end

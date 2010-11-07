@@ -1,7 +1,6 @@
 require 'formula'
 
 class Vim <Formula
-  # Actually vim HEAD is always stable
   head 'https://vim.googlecode.com/hg/'
   homepage 'http://www.vim.org/'
 
