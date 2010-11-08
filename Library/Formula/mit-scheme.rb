@@ -18,11 +18,14 @@ class MitScheme <Formula
     cd "src"
 
     # Take care of some hard-coded paths
-    inreplace %w(6001/edextra.scm 6001/floppy.scm compiler/etc/disload.scm configure 
-    edwin/techinfo.scm edwin/unix.scm lib/include/configure lib/include/option.c 
+    inreplace %w(6001/edextra.scm 6001/floppy.scm compiler/etc/disload.scm configure
+    edwin/techinfo.scm edwin/unix.scm lib/include/configure lib/include/option.c
     swat/c/tk3.2-custom/Makefile swat/c/tk3.2-custom/tcl/Makefile swat/scheme/other/btest.scm) do |s|
       s.gsub! "/usr/local", prefix
     end
+
+    # The configure script will add '-isysroot' to CPPFLAGS, so it didn't check .h here by default even Homebrew is installed in /usr/local. This breaks things when gdbm or other optional dependencies was installed using Homebrew
+    ENV.prepend 'CPPFLAGS', "-I#{HOMEBREW_PREFIX}/include"
 
     system "etc/make-liarc.sh", "--disable-debug", "--prefix=#{prefix}", "--mandir=#{man}"
     system "make install"
