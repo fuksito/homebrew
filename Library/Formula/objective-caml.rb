@@ -9,15 +9,17 @@ class ObjectiveCaml <Formula
   skip_clean :all
 
   def install
+    check_buggy_ld
     system "./configure", "--prefix", prefix, "--mandir", man
     ENV.deparallelize # Builds are not parallel-safe, esp. with many cores
-    system "make world"
-    system "make opt"
-    system "make opt.opt"
-    system "make install"
+    system "make", "world.opt"
+    system "make", "install"
 
-    # site-lib in the Cellar will be a symlink to the HOMEBREW_PREFIX location
     (HOMEBREW_PREFIX+"lib/ocaml/site-lib").mkpath
     ln_s HOMEBREW_PREFIX+"lib/ocaml/site-lib", lib+"ocaml/site-lib"
+  end
+
+  def check_buggy_ld
+    fail "The version of your linker (/usr/bin/ld) is ld64-115.4 from some version of Xcode 4 preview, which is known to be buggy and will cause the build fail mysteriously. To build this formula, you should either upgrade to latest version of Xcode 4 or uninstall it." if `/usr/bin/ld -v`.match 'ld64-115.4'
   end
 end
