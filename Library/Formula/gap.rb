@@ -4,7 +4,7 @@ require 'formula'
 ## gap -- installs the core gap system
 ## gap-pkg -- installs the gap packages
 ## gap-xtom -- installs extra table of marks
-## gap-dev -- installs the dev utilities. 
+## gap-dev -- installs the dev utilities.
 
 class GapPkg < Formula
   url 'ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/packages-2010_07_02-09_53_UTC.tar.gz'
@@ -39,22 +39,22 @@ class Gap <Formula
       s.gsub! "#{Dir.pwd}", "/usr/local/lib/gap4r4"
     end
     bin.install 'bin/gap.sh' => 'gap'
-  
+
     gaproot = lib+'gap4r4'
     # make install
-    gaproot.install Dir['*']    
-  
+    gaproot.install Dir['*']
+
     # Install the packages
     pkg = gaproot+'pkg'
-    GapPkg.new.brew { FileUtils.cp_r Dir['*'], pkg }
+    GapPkg.new.brew { cp_r Dir['*'], pkg }
 
     # Install the extra table of marks
-    GapXtom.new.brew { FileUtils.cp_r Dir['*'], gaproot }
+    GapXtom.new.brew { cp_r Dir['*'], gaproot }
 
     # Install the devtools
-    GapDev.new.brew {FileUtils.cp_r Dir['*'], gaproot }
+    GapDev.new.brew { cp_r Dir['*'], gaproot }
   end
-  
+
   def caveats
     puts <<-EOS
 ################################################################################
@@ -65,10 +65,10 @@ Several of the GAP packages contained code that needs to be compiled. Download:
 to $GAP_ROOT/pkg and execute the script. Where $GAP_ROOT is the location of
 where GAP was installed this should be:
 
-#{prefix}/lib/gap4r4/
+#{lib}/gap4r4/
 
-You might need to chmod +x the script before it compiles. Be warned that you 
-may face errors during compilation. If you do try copy and pasting lines from 
+You might need to chmod +x the script before it compiles. Be warned that you
+may face errors during compilation. If you do try copy and pasting lines from
 InstPackages.sh if this fails to work consult the packages readme files.
 ################################################################################
      EOS
