@@ -22,7 +22,7 @@ Dude! Just give me a one-liner!
 Okay then, but please note this installs Homebrew as root and
 [we recommend against that][sudo].
 
-    curl -LsSf http://github.com/mxcl/homebrew/tarball/master | sudo /usr/bin/tar xvz -C/usr/local --strip 1
+    curl -LsSf https://github.com/mxcl/homebrew/tarball/master | sudo /usr/bin/tar xvz -C/usr/local --strip 1
 
 
 But what packages are available?
@@ -45,10 +45,10 @@ I'm [Max Howell][mxcl] and I'm a splendid chap.
 
 
 [homepage]:http://mxcl.github.com/homebrew
-[gist]:http://gist.github.com/323731
+[gist]:https://gist.github.com/323731
 [xcode]:http://developer.apple.com/technologies/xcode.html
-[install]:http://wiki.github.com/mxcl/homebrew/installation
-[sudo]:http://wiki.github.com/mxcl/homebrew/installation#sudo
-[wiki]:http://wiki.github.com/mxcl/homebrew
+[install]:https://wiki.github.com/mxcl/homebrew/installation
+[sudo]:https://wiki.github.com/mxcl/homebrew/installation#sudo
+[wiki]:https://wiki.github.com/mxcl/homebrew
 [mxcl]:http://twitter.com/mxcl
-[browse-formulae]:http://github.com/mxcl/homebrew/tree/master/Library/Formula/
+[browse-formulae]:https://github.com/mxcl/homebrew/tree/master/Library/Formula/

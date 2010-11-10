@@ -302,7 +302,7 @@ If your proxy requires authentication:
 
 ## SEE ALSO
 
-Homebrew Wiki: <http://wiki.github.com/mxcl/homebrew/>
+Homebrew Wiki: <https://wiki.github.com/mxcl/homebrew/>
 
 `git`(1), `git-log`(1)
 
@@ -312,7 +312,7 @@ Max Howell, a splendid chap.
 
 ## BUGS
 
-See Issues on GitHub: <http://github.com/mxcl/homebrew/issues>
+See Issues on GitHub: <https://github.com/mxcl/homebrew/issues>
 
 
 [ronn]: http://rtomayko.github.com/ronn/
