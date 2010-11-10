@@ -4,10 +4,10 @@ def build_clang?
   ARGV.include? '--with-clang'
 end
 def all_targets?
-  ARGV.include? '--enable-all-targets'
+  ARGV.include? '--all-targets'
 end
 def ocaml_binding?
-  ARGV.include? '--enable-ocaml-binding'
+  ARGV.include? '--ocaml-binding'
 end
 
 class Clang <Formula
@@ -27,7 +27,7 @@ class Llvm <Formula
     [
         ['--with-clang', 'Build and install clang and clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
-        ['--enable-ocaml-binding', 'Enable Ocaml language binding']
+        ['--ocaml-binding', 'Enable Ocaml language binding']
     ]
   end
 
@@ -67,8 +67,8 @@ class Llvm <Formula
     cp_r source_dir+'include', src_dir
     rm_r [build_dir+'Release/lib/ocaml'] if ocaml_binding? # duplicated
     cp_r [build_dir+'include', build_dir+'Release', build_dir+'Makefile.config'], obj_dir
-    rm_f Dir["#{prefix}/lib/llvm/obj/Release/**/.dir"]
-    inreplace ["#{prefix}/bin/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
+    rm_f Dir["#{lib}/llvm/obj/Release/**/.dir"]
+    inreplace ["#{bin}/llvm-config", "#{obj_dir}/Release/bin/llvm-config"] do |s|
       s.gsub! build_dir, obj_dir
       s.gsub! source_dir, src_dir
     end
