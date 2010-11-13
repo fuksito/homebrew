@@ -6,7 +6,7 @@ class Sedna <Formula
   md5 '77a946163d60ace1bc940b8b71267a31'
   version '3.4.59'
 
-  depends_on 'cmake'
+  depends_on 'cmake' => :build
 
   def install
     path = pwd

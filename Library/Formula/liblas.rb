@@ -5,7 +5,7 @@ class Liblas <Formula
   homepage 'http://liblas.org'
   md5 '4a08325b7daf4006e3762804d722b770'
 
-  depends_on 'cmake'
+  depends_on 'cmake' => :build
   depends_on 'libgeotiff'
   depends_on 'gdal'
   depends_on 'boost'
