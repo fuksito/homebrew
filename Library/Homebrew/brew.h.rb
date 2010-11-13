@@ -85,9 +85,9 @@ class #{Formula.class_s name} <Formula
   md5 '#{md5}'
 
 <% if mode == :cmake %>
-  depends_on 'cmake'
+  depends_on 'cmake' => :build
 <% elsif mode == nil %>
-  # depends_on 'cmake'
+  # depends_on 'cmake' => :build
 <% end %>
 
   def install

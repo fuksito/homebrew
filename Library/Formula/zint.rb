@@ -6,7 +6,7 @@ class Zint <Formula
   md5 '31fbb05dc45d3c460075096b702cefb0'
   head 'git://zint.git.sourceforge.net/gitroot/zint/zint'
 
-  depends_on 'cmake'
+  depends_on 'cmake' => :build
   depends_on 'libpng'
 
   def install
