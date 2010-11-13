@@ -20,6 +20,8 @@ class SwiProlog <Formula
   end
 
   def install
+    fails_with_llvm "Failed to bootstrap with LLVM"
+
     args = ["--prefix=#{prefix}", "--mandir=#{man}"]
 
     # It looks like Apple has borked the Java JNI headers in Java 1.6.0_22-b04-37.
@@ -58,4 +60,9 @@ class SwiProlog <Formula
     system "make"
     system "make install"
   end
+
+  def test
+    system "#{bin}/swipl --version"
+  end
+
 end
