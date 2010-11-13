@@ -9,6 +9,7 @@ class Anic <Formula
   end
 
   def install
+    ENV.m32
     system "make"
     system "make test"
     bin.install "anic"
