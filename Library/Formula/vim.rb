@@ -1,8 +1,14 @@
 require 'formula'
 
 class Vim <Formula
-  head 'https://vim.googlecode.com/hg/'
+  # Get stable versions from hg repo instead of downloading an increasing
+  # number of separate patches.
+  url 'https://vim.googlecode.com/hg/', :revision => '1ccc1ace9e5b6c1223ba191ce20729a49f13970e'
+  version '7.3.050'
   homepage 'http://www.vim.org/'
+
+  head 'https://vim.googlecode.com/hg/'
+
   def install
     system "./configure", "--prefix=#{prefix}",
                           "--mandir=#{man}",
@@ -13,7 +19,6 @@ class Vim <Formula
                           "--with-tlib=ncurses",
                           "--enable-pythoninterp",
                           "--enable-rubyinterp",
-                          "--with-ruby-command=/usr/bin/ruby", # ruby 1.9 won't work
                           "--with-features=huge"
     system "make"
     system "make install"
