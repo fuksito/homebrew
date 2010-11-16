@@ -9,7 +9,9 @@ class ObjectiveCaml <Formula
   skip_clean :all
 
   def install
-    system "./configure", "--prefix", prefix, "--mandir", man
+    ENV.m32
+
+    system "./configure", "--prefix", prefix, "--mandir", man, "-cc", "gcc -m32"
     ENV.deparallelize # Builds are not parallel-safe, esp. with many cores
     system "make world"
     system "make opt"
