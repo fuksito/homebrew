@@ -14,9 +14,8 @@ class Rubinius < Formula
     # Let Rubinius define its own flags; messing with these causes build breaks.
     %w{CC CXX LD CFLAGS CXXFLAGS CPPFLAGS LDFLAGS}.each { |e| ENV.delete(e) }
 
-    # "--skip-system" means to use the included LLVM
     system "/usr/bin/ruby", "./configure",
-                          "--skip-system",
+                          "--skip-system", # download and use the prebuilt LLVM
                           "--prefix", prefix,
                           "--includedir", "#{include}/rubinius",
                           "--libdir", lib,
