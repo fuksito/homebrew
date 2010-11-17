@@ -30,11 +30,13 @@ system "ln", "-s", "/Users/tianyi/OSS/~ruby/macruby/llvm-trunk/Release", "."
     args = [
       "CC=#{ENV['CC']}",
       "CXX=#{ENV['CXX']}",
+      "DESTDIR=#{prefix}",
+      "INSTALL='/usr/bin/install -c -d'",
       "archs=#{snow_leopard_64? ? 'x86_64' : 'i386'}",
-      #"framework_instdir=#{prefix}",
+      "framework_instdir=/",
       "jobs=#{Hardware.processor_count}",
       "llvm_path=#{llvm_path}/Release",
-      "sym_instdir=#{prefix}"
+      "sym_instdir=/"
     ]
 
     rake *args
