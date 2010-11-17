@@ -3,8 +3,9 @@ require 'formula'
 class PltRacket <Formula
   # Use GitHub; tarball doesn't have everything needed for building on OS X
   head 'git://github.com/plt/racket.git'
-  url 'https://github.com/plt/racket/zipball/v5.0.2'
+  url 'http://github.com/plt/racket/tarball/v5.0.2'
   homepage 'http://racket-lang.org/'
+  md5 'c66a7d9f2d18f4974cbc7bdd5d560e5f'
 
   # Don't sttip symbols; need them for dynamic linking.
   skip_clean 'bin'
