@@ -23,8 +23,7 @@ class Macruby < Formula
               "--enable-targets=host-only",
               "--enable-optimized",
               "--with-llvmgccdir=/tmp"
-system "ln", "-s", "/Users/tianyi/OSS/~ruby/macruby/llvm-trunk/Release", "."
-#       system "make"
+       system "make"
     end
 
     args = [
