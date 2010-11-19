@@ -47,6 +47,8 @@ class Llvm <Formula
       Clang.new('clang').brew { clang_dir.install Dir['*'] }
     end
 
+    ENV['REQUIRES_RTTI']='1' if enable_rtti?
+
     source_dir = Pathname(Dir.pwd)
     build_dir = source_dir+'build'
     mkdir build_dir
@@ -59,7 +61,7 @@ class Llvm <Formula
                             "--enable-optimized",
                             "--enable-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
-      system "make" + enable_rtti? ? ' REQUIRES_RTTI=1' : ''
+      system "make"
       system "make install"
     end
 
