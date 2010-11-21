@@ -3,14 +3,14 @@
 
 require 'utils.rb'
 
-if ARGV.empty?
-  puts 'This command requires at least one URL argument'
-  exit 1
-end
-
 if ARGV.include? '--install'
   ARGV.delete '--install'
   install = true
+end
+
+if ARGV.empty?
+  puts 'This command requires at least one URL argument'
+  exit 1
 end
 
 HOMEBREW_REPOSITORY.cd do
@@ -38,7 +38,7 @@ HOMEBREW_REPOSITORY.cd do
     if install
       status, filename = `git diff HEAD~1 --name-status`.split()
       # Don't try and do anything to removed files.
-      if status == 'A' or status == 'M'
+      if (status == 'A' or status == 'M') and filename.include? '/Formula/'
         formula = File.basename(filename, '.rb')
         ohai "Installing #{formula}"
         # Not sure if this is the best way to install?
