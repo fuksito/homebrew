@@ -2,8 +2,7 @@ require 'formula'
 
 class GitSubtree <Formula
   homepage 'https://github.com/apenwarr/git-subtree'
-  head 'git://github.com/apenwarr/git-subtree.git',
-        :tag => 'v0.3'
+  head 'git://github.com/apenwarr/git-subtree.git'
 
   def options
     [
