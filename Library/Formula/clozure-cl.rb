@@ -3,6 +3,7 @@ require 'formula'
 class ClozureCl <Formula
   url 'ftp://ftp.clozure.com/pub/release/1.6/ccl-1.6-darwinx86.tar.gz'
   version '1.6'
+  md5 '290100fdb8dab3b9967ce8b688113199'
   homepage 'http://openmcl.clozure.com/'
 
   def install
