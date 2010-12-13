@@ -1,10 +1,9 @@
 require 'formula'
 
 class ClozureCl <Formula
-  url 'ftp://ftp.clozure.com/pub/release/1.5/ccl-1.5-darwinx86.tar.gz'
-  version '1.5'
+  url 'ftp://ftp.clozure.com/pub/release/1.6/ccl-1.6-darwinx86.tar.gz'
+  version '1.6'
   homepage 'http://openmcl.clozure.com/'
-  md5 'd43f9c2aa94b58d9ef56e48638a22ebc'
 
   def install
     rm_rf Dir['**/.svn/']+Dir['**/.cvsignore']
