@@ -38,6 +38,8 @@ class Llvm <Formula
   def install
     fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
 
+    ENV['REQUIRES_RTTI']='1'
+
     if build_clang?
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new('clang').brew { clang_dir.install Dir['*'] }
