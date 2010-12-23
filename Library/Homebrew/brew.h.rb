@@ -1,5 +1,5 @@
 FORMULA_META_FILES = %w[README README.md ChangeLog COPYING LICENSE LICENCE COPYRIGHT AUTHORS]
-PLEASE_REPORT_BUG = "#{Tty.white}Please report this bug at #{Tty.em}https://github.com/mxcl/homebrew/issues#{Tty.reset}"
+PLEASE_REPORT_BUG = "#{Tty.white}Please follow the instructions to report this bug at #{Tty.em}https://github.com/mxcl/homebrew/wiki/new-issue#{Tty.reset}"
 
 def check_for_blacklisted_formula names
   return if ARGV.force?
@@ -12,6 +12,11 @@ def check_for_blacklisted_formula names
 
       We recommend using a MacTeX distribution:
         http://www.tug.org/mactex/
+    EOS
+
+    when 'mercurial', 'hg' then abort <<-EOS.undent
+      Mercurial can be install thusly:
+        brew install pip && pip install mercurial
     EOS
 
     when 'setuptools' then abort <<-EOS.undent
@@ -80,9 +85,9 @@ class #{Formula.class_s name} <Formula
   md5 '#{md5}'
 
 <% if mode == :cmake %>
-  depends_on 'cmake' => :build
+  depends_on 'cmake'
 <% elsif mode == nil %>
-  # depends_on 'cmake' => :build
+  # depends_on 'cmake'
 <% end %>
 
   def install
@@ -179,7 +184,7 @@ def github_info name
     end
   end
 
-  return "https://github.com/#{user}/homebrew/commits/#{branch}/Library/Formula/#{formula_name}"
+  return "http://github.com/#{user}/homebrew/commits/#{branch}/Library/Formula/#{formula_name}"
 end
 
 def info f
@@ -234,9 +239,9 @@ def issues_for_formula name
 
   issues = []
 
-  open("https://github.com/api/v2/yaml/issues/search/mxcl/homebrew/open/"+name) do |f|
+  open("http://github.com/api/v2/yaml/issues/search/mxcl/homebrew/open/"+name) do |f|
     YAML::load(f.read)['issues'].each do |issue|
-      issues << 'https://github.com/mxcl/homebrew/issues/#issue/%s' % issue['number']
+      issues << 'http://github.com/mxcl/homebrew/issues/#issue/%s' % issue['number']
     end
   end
 
@@ -356,9 +361,9 @@ end
 
 def macports_or_fink_installed?
   # See these issues for some history:
-  # https://github.com/mxcl/homebrew/issues/#issue/13
-  # https://github.com/mxcl/homebrew/issues/#issue/41
-  # https://github.com/mxcl/homebrew/issues/#issue/48
+  # http://github.com/mxcl/homebrew/issues/#issue/13
+  # http://github.com/mxcl/homebrew/issues/#issue/41
+  # http://github.com/mxcl/homebrew/issues/#issue/48
 
   %w[port fink].each do |ponk|
     path = `/usr/bin/which -s #{ponk}`
@@ -438,7 +443,7 @@ def brew_install
   ############################################################ sanity checks
   case Hardware.cpu_type when :ppc, :dunno
     abort "Sorry, Homebrew does not support your computer's CPU architecture.\n"+
-          "For PPC support, see: https://github.com/sceaga/homebrew/tree/powerpc"
+          "For PPC support, see: http://github.com/sceaga/homebrew/tree/powerpc"
   end
 
   raise "Cannot write to #{HOMEBREW_CELLAR}" if HOMEBREW_CELLAR.exist? and not HOMEBREW_CELLAR.writable?
