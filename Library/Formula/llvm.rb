@@ -9,6 +9,9 @@ end
 def ocaml_binding?
   ARGV.include? '--ocaml-binding'
 end
+def build_universal?
+  ARGV.include? '--universal'
+end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -27,7 +30,8 @@ class Llvm <Formula
     [
         ['--with-clang', 'Build and install clang and clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
-        ['--ocaml-binding', 'Enable Ocaml language binding']
+        ['--ocaml-binding', 'Enable Ocaml language binding'],
+        ['--universal', 'Build both i386 and x86_64 architectures']
     ]
   end
 
@@ -37,6 +41,11 @@ class Llvm <Formula
 
   def install
     fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
+
+    if build_universal?
+      ENV['UNIVERSAL'] = '1'
+      ENV['UNIVERSAL_ARCH'] = 'i386 x86_64'
+    end
 
     ENV['REQUIRES_RTTI']='1'
 

@@ -5,9 +5,9 @@ def which_gfortran
 end
 
 class R <Formula
-  url 'http://cran.r-project.org/src/base/R-2/R-2.12.0.tar.gz'
+  url 'http://cran.r-project.org/src/base/R-2/R-2.12.1.tar.gz'
   homepage 'http://www.R-project.org/'
-  md5 'aa003654d238d70bf5bc7433b8257aac'
+  md5 '078e8d1179fc9a762e326e6da2725468'
 
   depends_on 'gfortran' if which_gfortran.empty?
 
