@@ -12,6 +12,12 @@ end
 def build_universal?
   ARGV.include? '--universal'
 end
+def build_shared?
+  ARGV.include? '--shared'
+end
+def build_rtti?
+  ARGV.include? '--rtti'
+end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -31,6 +37,8 @@ class Llvm <Formula
         ['--with-clang', 'Build and install clang and clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
         ['--ocaml-binding', 'Enable Ocaml language binding'],
+        ['--shared', 'Build shared library'],
+        ['--rtti', 'Build with RTTI information'],
         ['--universal', 'Build both i386 and x86_64 architectures']
     ]
   end
@@ -42,17 +50,22 @@ class Llvm <Formula
   def install
     fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
 
+    if build_shared? && build_universal?
+      onoe "Cannot specify both shared and universal (will not build)"
+      exit 1
+    end
+
+    if build_clang?
+      clang_dir = Pathname.new(Dir.pwd)+'tools/clang'
+      Clang.new.brew { clang_dir.install Dir['*'] }
+    end
+
     if build_universal?
       ENV['UNIVERSAL'] = '1'
       ENV['UNIVERSAL_ARCH'] = 'i386 x86_64'
     end
 
-    ENV['REQUIRES_RTTI']='1'
-
-    if build_clang?
-      clang_dir = Pathname(Dir.pwd)+'tools/clang'
-      Clang.new('clang').brew { clang_dir.install Dir['*'] }
-    end
+    ENV['REQUIRES_RTTI'] = '1' if build_rtti?
 
     source_dir = Pathname(Dir.pwd)
     build_dir = source_dir+'build'
@@ -64,7 +77,7 @@ class Llvm <Formula
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
                             "--enable-libffi",
                             "--enable-optimized",
-                            "--enable-shared",
+                            "--#{build_shared? ? 'enable':'disable'}-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
       system "make"
       system "make install"
