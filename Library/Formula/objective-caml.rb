@@ -9,14 +9,12 @@ class ObjectiveCaml <Formula
   skip_clean :all
 
   def install
-    ENV.m32
-
-    system "./configure", "--prefix", prefix, "--mandir", man, "-cc", "gcc -m32"
+    system "./configure", "--prefix", HOMEBREW_PREFIX, "--mandir", man
     ENV.deparallelize # Builds are not parallel-safe, esp. with many cores
     system "make world"
     system "make opt"
     system "make opt.opt"
-    system "make install"
+    system "make PREFIX=#{prefix} install"
 
     # site-lib in the Cellar will be a symlink to the HOMEBREW_PREFIX location
     (HOMEBREW_PREFIX+"lib/ocaml/site-lib").mkpath
