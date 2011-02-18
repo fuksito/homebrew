@@ -16,8 +16,6 @@ class Gnutls <Formula
   def install
     fails_with_llvm "Undefined symbols when linking", :build => "2326"
 
-    ENV.universal_binary	# build fat so wine can use it
-
     system "./configure", "--disable-debug", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           "--disable-guile"
