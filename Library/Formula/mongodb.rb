@@ -1,17 +1,17 @@
 require 'formula'
 require 'hardware'
 
-class Mongodb <Formula
+class Mongodb < Formula
   homepage 'http://www.mongodb.org/'
 
   if Hardware.is_64_bit? and not ARGV.include? '--32bit'
-    url 'http://fastdl.mongodb.org/osx/mongodb-osx-x86_64-1.6.3.tgz'
-    md5 'da6a3a1e52e2ec7134a75b857ad540e8'
-    version '1.6.3-x86_64'
+    url 'http://fastdl.mongodb.org/osx/mongodb-osx-x86_64-1.6.5.tgz'
+    md5 'f3438db5a5bd3ac4571616f3d19caf00'
+    version '1.6.5-x86_64'
   else
-    url 'http://fastdl.mongodb.org/osx/mongodb-osx-i386-1.6.3.tgz'
-    md5 '6f8244f0bc3a842d16f92e5f7fa33e98'
-    version '1.6.3-i386'
+    url 'http://fastdl.mongodb.org/osx/mongodb-osx-i386-1.6.5.tgz'
+    md5 '064c9c68752968875e4ccaf8801ef031'
+    version '1.6.5-i386'
   end
 
   skip_clean :all
@@ -35,12 +35,13 @@ class Mongodb <Formula
 
   def caveats; <<-EOS
 If this is your first install, automatically load on login with:
-    cp #{prefix}/org.mongodb.mongod.plist ~/Library/LaunchAgents
+    mkdir -p ~/Library/LaunchAgents
+    cp #{prefix}/org.mongodb.mongod.plist ~/Library/LaunchAgents/
     launchctl load -w ~/Library/LaunchAgents/org.mongodb.mongod.plist
 
 If this is an upgrade and you already have the org.mongodb.mongod.plist loaded:
     launchctl unload -w ~/Library/LaunchAgents/org.mongodb.mongod.plist
-    cp #{prefix}/org.mongodb.mongod.plist ~/Library/LaunchAgents
+    cp #{prefix}/org.mongodb.mongod.plist ~/Library/LaunchAgents/
     launchctl load -w ~/Library/LaunchAgents/org.mongodb.mongod.plist
 
 Or start it manually:

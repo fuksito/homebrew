@@ -1,50 +1,47 @@
 require 'formula'
+require 'hardware'
 
-# The official binary for 1.0.29 is used to bootstrap the latest version.
-class SbclBinary < Formula
-  url 'http://downloads.sourceforge.net/project/sbcl/sbcl/1.0.29/sbcl-1.0.29-x86-darwin-binary-r2.tar.bz2'
-  md5 '6e6b027a5fd05ef0c8faee30d89ffe54'
-  version '1.0.29'
+class SbclBootstrapBinaries < Formula
+  url 'http://downloads.sourceforge.net/project/sbcl/sbcl/1.0.30/sbcl-1.0.30-x86-darwin-binary.tar.bz2'
+  md5 'c15bbff2e7a9083ecd50942edb74cc8c'
+  version "1.0.30"
 end
 
+
 class Sbcl < Formula
-  url 'http://downloads.sourceforge.net/project/sbcl/sbcl/1.0.43/sbcl-1.0.43-source.tar.bz2'
   homepage 'http://www.sbcl.org/'
-  md5 '2b125844371881a99cfdf63c286e74cd'
+  head 'git://sbcl.boinkor.net/sbcl.git'
+
+  url 'http://downloads.sourceforge.net/project/sbcl/sbcl/1.0.45/sbcl-1.0.45-source.tar.bz2'
+  md5 'b80e491b8e9228bbfa4fe679fd608697'
+  version '1.0.45'
 
   skip_clean 'bin'
   skip_clean 'lib'
 
+  def patches
+    base = "http://svn.macports.org/repository/macports/trunk/dports/lang/sbcl/files"
+    { :p0 => ["patch-base-target-features.diff",
+              "patch-make-doc.diff",
+              "patch-posix-tests.diff",
+              "patch-use-mach-exception-handler.diff"].map { |file_name| "#{base}/#{file_name}" }
+    }
+  end
+
   def install
-    original_path = pwd
-    puts "original_path=#{original_path}"
-    mktemp do
-      # install 1.0.29 to a temporary location
-      binary_path = pwd
-      SbclBinary.new('sbcl-binary').brew do
-        install_sbcl binary_path
-      end
-      # build and install 1.0.43
-      cd original_path do
-        system "env",
-               "PATH=#{binary_path}/bin:#{ENV['PATH']}",
-               "SBCL_HOME=#{binary_path}/lib/sbcl",
-               "sh",
-               "make.sh",
-               "--prefix=#{prefix}"
-        cd 'tests' do
-          system "sh run-tests.sh"
-        end
-        install_sbcl prefix
-      end
-    end
-  end
+    build_directory = Dir.pwd
+    SbclBootstrapBinaries.new.brew {
+      # We only need the binaries for bootstrapping, so don't install
+      # anything:
 
-  def install_sbcl path
-    system "env",
-           "INSTALL_ROOT=#{path}",
-           "sh",
-           "install.sh"
-  end
+      command = Dir.pwd + "/src/runtime/sbcl"
+      core = Dir.pwd + "/output/sbcl.core"
+      xc_cmdline = "#{command} --core #{core} --disable-debugger --no-userinit --no-sysinit"
 
+      Dir.chdir(build_directory)
+      system "./make.sh --prefix='#{prefix}' --xc-host='#{xc_cmdline}'"
+    }
+    ENV['INSTALL_ROOT'] = prefix
+    system "sh install.sh"
+  end
 end

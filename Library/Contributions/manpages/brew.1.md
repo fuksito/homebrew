@@ -46,7 +46,7 @@ didn't include with OS X.
 
     To install a newer version of HEAD use
     `brew rm <foo> && brew install --HEAD <foo>`
-    or `brew --force --HEAD <foo>`.
+    or `brew install --force --HEAD <foo>`.
 
   * `install --interactive [--git]` <formula>:
     Download and patch <formula>, then open a shell. This allows the user to
@@ -171,8 +171,11 @@ didn't include with OS X.
     If `--warn` is passed, perform additional stricter checks that may not need
     to be fixed before submitting.
 
-  * `options` <formula>:
+  * `options [--compact]` <formula>:
     Display install options specific to <formula>.
+
+    If `--compact` is passed, show all options on a single line separated by
+    spaces.
 
   * `missing`:
     Check all installed formuale for missing dependencies.
@@ -206,7 +209,7 @@ didn't include with OS X.
   * `--cellar`:
     Display Homebrew's Cellar path. *Default:* `/usr/local/Cellar`
 
-  * `--cellar`:
+  * `--cellar` <formula>:
     Display the location in the cellar where <formula> would be installed,
     without any sort of versioned folder as the last path.
 
@@ -228,7 +231,7 @@ to recognize `brew cmdname`.
 
 Some sample commands ship with Homebrew and are enabled by default.
 
-    $ ls `brew --repository`/Lirary/Contributes/examples
+    $ ls `brew --repository`/Library/Contributions/examples
 
 
 
@@ -274,6 +277,10 @@ Some sample commands ship with Homebrew and are enabled by default.
 
     This issue typically occurs when using FileVault or custom SSD
     configurations.
+
+  * HOMEBREW\_USE\_GCC:
+    If set, instructs Homebrew to use gcc, even if the system default
+    is currently set to LLVM.
 
   * HOMEBREW\_USE\_LLVM:
     If set, instructs Homebrew to use the LLVM front-ends to the GCC

@@ -9,25 +9,44 @@ end
 def ocaml_binding?
   ARGV.include? '--ocaml-binding'
 end
+def build_universal?
+  ARGV.include? '--universal'
+end
+def build_shared?
+  ARGV.include? '--shared'
+end
+def build_rtti?
+  ARGV.include? '--rtti'
+end
 
-class Clang <Formula
+class Clang < Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
   homepage  'http://llvm.org/'
   md5       '10e14c901fc3728eecbd5b829e011b59'
   head      'http://llvm.org/svn/llvm-project/cfe/trunk', :using => :svn
 end
 
-class Llvm <Formula
+class Llvm < Formula
   url       'http://llvm.org/releases/2.8/llvm-2.8.tgz'
   homepage  'http://llvm.org/'
   md5       '220d361b4d17051ff4bb21c64abe05ba'
   head      'http://llvm.org/svn/llvm-project/llvm/trunk', :using => :svn
 
+  def patches
+    # changes the link options for the shared library build
+    # to use the preferred way to build libraries in Mac OS X
+    # Reported upstream: http://llvm.org/bugs/show_bug.cgi?id=8985
+    DATA if build_shared?
+  end
+
   def options
     [
         ['--with-clang', 'Build and install clang and clang static analyzer'],
         ['--all-targets', 'Build non-host targets'],
-        ['--ocaml-binding', 'Enable Ocaml language binding']
+        ['--ocaml-binding', 'Enable Ocaml language binding'],
+        ['--shared', 'Build shared library'],
+        ['--rtti', 'Build with RTTI information'],
+        ['--universal', 'Build both i386 and x86_64 architectures']
     ]
   end
 
@@ -38,10 +57,21 @@ class Llvm <Formula
   def install
     fails_with_llvm "The llvm-gcc in Xcode is outdated to compile current version of llvm"
 
+    if build_shared? && build_universal?
+      onoe "Cannot specify both shared and universal (will not build)"
+      exit 1
+    end
+
     if build_clang?
       clang_dir = Pathname(Dir.pwd)+'tools/clang'
       Clang.new('clang').brew { clang_dir.install Dir['*'] }
     end
+
+    if build_universal?
+      ENV['UNIVERSAL'] = '1'
+      ENV['UNIVERSAL_ARCH'] = 'i386 x86_64'
+    end
+    ENV['REQUIRES_RTTI'] = '1' if build_rtti?
 
     source_dir = Pathname(Dir.pwd)
     build_dir = source_dir+'build'
@@ -53,11 +83,14 @@ class Llvm <Formula
                             "--enable-bindings=#{ocaml_binding? ? 'ocaml':'none'}",
                             "--enable-libffi",
                             "--enable-optimized",
-                            "--enable-shared",
+                            "--#{build_shared ? 'enable' : 'disable'}-shared",
                             "--enable-targets=#{all_targets? ? 'all':'host-only'}"
       system "make"
       system "make install"
     end
+
+    system "make" # separate steps required, otherwise the build fails
+    system "make install"
 
     # Install files in LLVM_SRC_DIR and LLVM_OBJ_DIR, they're necessary for llvm to compile some targets, e.g. llvm-gcc
     # What to copy is roughly the same as MacPorts did
@@ -103,3 +136,18 @@ class Llvm <Formula
     system 'llvm-config'
   end
 end
+
+__END__
+diff --git a/Makefile.rules b/Makefile.rules
+index 9cff105..44d5b2d 100644
+--- a/Makefile.rules
++++ b/Makefile.rules
+@@ -497,7 +497,7 @@ ifeq ($(HOST_OS),Darwin)
+   # Get "4" out of 10.4 for later pieces in the makefile.
+   DARWIN_MAJVERS := $(shell echo $(DARWIN_VERSION)| sed -E 's/10.([0-9]).*/\1/')
+
+-  SharedLinkOptions=-Wl,-flat_namespace -Wl,-undefined,suppress \
++  SharedLinkOptions=-Wl,-undefined,dynamic_lookup \
+                     -dynamiclib
+   ifneq ($(ARCH),ARM)
+     SharedLinkOptions += -mmacosx-version-min=$(DARWIN_VERSION)
