@@ -1,7 +1,7 @@
 require 'formula'
 
 class Hugs98 < Formula
-  url 'http://cvs.haskell.org/Hugs/downloads/2006-09/hugs98-plus-Sep2006.tar.gz'
+  url 'http://www.haskell.org/hugs/downloads/2006-09/hugs98-plus-Sep2006.tar.gz'
   version 'plus-Sep2006'
   homepage 'http://www.haskell.org/hugs/'
   md5 'e03e0ad79750d037237c47ebe33fa20e'
