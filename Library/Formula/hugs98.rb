@@ -4,7 +4,7 @@ class Hugs98 < Formula
   url 'http://www.haskell.org/hugs/downloads/2006-09/hugs98-plus-Sep2006.tar.gz'
   version 'plus-Sep2006'
   homepage 'http://www.haskell.org/hugs/'
-  sha256 "fc8ba1cb9979010507633be97d5812c9d62adc52b8d1cff2ced53a7b27849e9b"
+  sha256 "aafaca9ca544572ebef70bbe86b5eb0abaa5d7c11c0b766d7db72a46b022bed5"
 
   depends_on 'readline'
 
